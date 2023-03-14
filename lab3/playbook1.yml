@@ -1,0 +1,7 @@
+- name: Change names of CHRs
+  hosts: ungrouped
+  tasks:
+    - name: Change name
+      community.routeros.command:
+        commands:
+          - /system identity set name="{{interfaces[0].device.name}}"

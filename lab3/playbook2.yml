@@ -1,0 +1,17 @@
+- name: Set serial numbers
+  hosts: ungrouped
+  gather_facts: false
+  tasks:
+    - name: Get serial number
+      community.routeros.command:
+        commands:
+          - /system license print
+      register: license
+    - name: Add serial number to Netbox
+      netbox_device:
+        netbox_url: http://51.250.31.232/
+        netbox_token: f4e5be2fa30a08edd474dd232ecfb6fc1457a0fc
+        data:
+          name: "{{interfaces[0].device.name}}"
+          serial: "{{license.stdout_lines[0][0].split(' ').1}}"
+        state: present
